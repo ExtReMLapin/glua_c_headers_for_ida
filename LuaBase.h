@@ -13,6 +13,13 @@ struct QAngle {
   float z;
 };
 
+enum PushSpecial {
+  SPECIAL_GLOB, // Global table
+  SPECIAL_ENV, // Environment table
+  SPECIAL_REG, // Registry table
+};
+
+
 struct lua_State;
 
 
@@ -182,7 +189,7 @@ struct ILuaBase {
   void( * ReferencePush)(int);
 
   // Push a special value onto the top of the stack (see SPECIAL_* enums)
-  void( * PushSpecial)(int);
+  void( * PushSpecial)(PushSpecial);
 
   // Returns true if the value at iStackPos is of type iType
   // See: Types.h
@@ -245,15 +252,9 @@ struct ILuaBase {
 };
 
 // For use with ILuaBase::PushSpecial
-enum PushSpecial {
-  SPECIAL_GLOB, // Global table
-  SPECIAL_ENV, // Environment table
-  SPECIAL_REG, // Registry table
-
-};
 
 struct lua_State {
-  //  unsigned char _ignore_this_common_lua_header_[48 + 22];
+  unsigned char _ignore_this_common_lua_header_[48 + 22];
   ILuaBase * luabase;
 };
 
